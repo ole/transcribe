@@ -3,5 +3,6 @@ import XCTest
 import TranscribeTests
 
 var tests = [XCTestCaseEntry]()
-tests += TranscribeTests.allTests()
+tests += TranscribeTests.__allTests()
+
 XCTMain(tests)
