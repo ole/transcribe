@@ -5,6 +5,18 @@ extension AmazonTranscribe {
         public var segments: [Segment]
         public var speakers: [Speaker]
 
+        public subscript(speaker speakerLabel: String) -> Speaker? {
+            get {
+                return speakers.first(where: { $0.speakerLabel == speakerLabel })
+            }
+            set {
+                guard let index = speakers.firstIndex(where: { $0.speakerLabel == speakerLabel }),
+                    let newValue = newValue
+                    else { return }
+                speakers[index] = newValue
+            }
+        }
+
         /// A list of consecutive fragments by the same speaker
         public struct Segment {
             public var time: Range<Timecode>
@@ -33,6 +45,17 @@ extension AmazonTranscribe {
             public var speakerLabel: String
             /// The speaker's name as it should appear in the formatted output.
             public var name: String
+        }
+    }
+}
+
+extension AmazonTranscribe.Transcript.Fragment {
+    public var content: String {
+        switch kind {
+        case .pronunciation(let p):
+            return p.content
+        case .punctuation(let content):
+            return content
         }
     }
 }
