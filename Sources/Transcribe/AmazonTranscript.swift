@@ -1,3 +1,5 @@
+import Foundation
+
 extension AmazonTranscribe {
     /// Model type for working with transcripts
     /// Use Transcript.init(transcriptFile:) to create this value from a TranscriptFile
@@ -61,13 +63,23 @@ extension AmazonTranscribe.Transcript.Fragment {
 }
 
 extension AmazonTranscribe.Transcript {
-    public init(transcriptFile: AmazonTranscribe.TranscriptFile) throws {
+    public init() {
+        self.segments = []
+        self.speakers = []
+    }
+
+    public init(transcriptFile file: URL) throws {
+        let rawTranscript = try AmazonTranscribe.RawTranscript(file: file)
+        try self.init(rawTranscript: rawTranscript)
+    }
+
+    public init(rawTranscript: AmazonTranscribe.RawTranscript) throws {
         // Iterate over results.speaker_labels.segments
-        let segments = try transcriptFile.results.speaker_labels.segments.map { rawSegment -> AmazonTranscribe.Transcript.Segment in
+        let segments = try rawTranscript.results.speaker_labels.segments.map { rawSegment -> AmazonTranscribe.Transcript.Segment in
             let segmentTime = try Range(rawSegment)
 
             // Iterate over results.items and find all fragments that belong to this segment
-            let rawSpeechFragments = try transcriptFile.results.items
+            let rawSpeechFragments = try rawTranscript.results.items
                 .drop(while: { rawSpeechFragment in
                     guard let fragmentTime = try Range(rawSpeechFragment) else {
                         // Drop any segment without a timecode (e.g. punctuation)
@@ -109,7 +121,7 @@ extension AmazonTranscribe.Transcript {
 }
 
 extension Range where Bound == Timecode {
-    init(_ rawSegment: AmazonTranscribe.TranscriptFile.SpeakerSegment) throws {
+    init(_ rawSegment: AmazonTranscribe.RawTranscript.SpeakerSegment) throws {
         guard let startTime = Timecode(text: rawSegment.start_time) else {
             throw ParseError.couldNotConvertStringToDouble(text: rawSegment.start_time, context: "results.speaker_labels.segments.start_time")
         }
@@ -122,7 +134,7 @@ extension Range where Bound == Timecode {
         self = startTime..<endTime
     }
 
-    init(_ rawFragment: AmazonTranscribe.TranscriptFile.SpeakerSegment.Item) throws {
+    init(_ rawFragment: AmazonTranscribe.RawTranscript.SpeakerSegment.Item) throws {
         guard let startTime = Timecode(text: rawFragment.start_time) else {
             throw ParseError.couldNotConvertStringToDouble(text: rawFragment.start_time, context: "results.speaker_labels.segments.items.start_time")
         }
@@ -135,7 +147,7 @@ extension Range where Bound == Timecode {
         self = startTime..<endTime
     }
 
-    init?(_ rawFragment: AmazonTranscribe.TranscriptFile.Item) throws {
+    init?(_ rawFragment: AmazonTranscribe.RawTranscript.Item) throws {
         guard let startTimeText = rawFragment.start_time, let endTimeText = rawFragment.end_time else {
             return nil
         }

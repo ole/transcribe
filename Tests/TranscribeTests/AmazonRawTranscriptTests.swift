@@ -1,11 +1,11 @@
 import XCTest
 @testable import Transcribe
 
-final class AmazonTranscriptFileTests: XCTestCase {
+final class AmazonRawTranscriptTests: XCTestCase {
     func test_parseAmazonTranscribeJSONFile() {
         let file = Bundle(for: type(of: self)).url(forResource: "amazon-transcribe-swift-community-podcast-0001", withExtension: "json")!
         do {
-            let sut = try AmazonTranscribe.TranscriptFile(file: file)
+            let sut = try AmazonTranscribe.RawTranscript(file: file)
             XCTAssertEqual(sut.jobName, "swift-community-podcast-0001")
             XCTAssertEqual(sut.accountId, "***REMOVED***")
             XCTAssertEqual(sut.results.speaker_labels.segments.count, 324)

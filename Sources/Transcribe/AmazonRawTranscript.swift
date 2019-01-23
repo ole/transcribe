@@ -4,7 +4,7 @@ extension AmazonTranscribe {
     /// A 1-to-1 reproduction of the format of an Amazon Transcribe transcription result JSON file.
     /// The aim is to map the file format as-is, not to make it as Swift-friendly as possible.
     /// Field names and types follow the original JSON structure.
-    public struct TranscriptFile: Decodable {
+    public struct RawTranscript: Decodable {
         var jobName: String
         var accountId: String
         var results: Results
@@ -56,11 +56,11 @@ extension AmazonTranscribe {
     }
 }
 
-extension AmazonTranscribe.TranscriptFile {
+extension AmazonTranscribe.RawTranscript {
     /// Loads and parses an Amazon Transcribe transcription result JSON file.
     public init(file: URL) throws {
         let jsonData = try Data(contentsOf: file)
         let decoder = JSONDecoder()
-        self = try decoder.decode(AmazonTranscribe.TranscriptFile.self, from: jsonData)
+        self = try decoder.decode(AmazonTranscribe.RawTranscript.self, from: jsonData)
     }
 }
