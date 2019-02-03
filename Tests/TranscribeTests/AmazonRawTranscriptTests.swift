@@ -3,9 +3,9 @@ import XCTest
 
 final class AmazonRawTranscriptTests: XCTestCase {
     func test_parseAmazonTranscribeJSONFile() {
-        let file = Bundle(for: type(of: self)).url(forResource: "amazon-transcribe-swift-community-podcast-0001", withExtension: "json")!
         do {
-            let sut = try AmazonTranscribe.RawTranscript(file: file)
+            let inputFile = try fixturesDirectory().appendingPathComponent("amazon-transcribe-swift-community-podcast-0001.json")
+            let sut = try AmazonTranscribe.RawTranscript(file: inputFile)
             XCTAssertEqual(sut.jobName, "swift-community-podcast-0001")
             XCTAssertEqual(sut.accountId, "***REMOVED***")
             XCTAssertEqual(sut.results.speaker_labels.segments.count, 324)
