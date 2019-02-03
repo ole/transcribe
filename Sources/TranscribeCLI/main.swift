@@ -36,12 +36,8 @@ do {
         throw TranscribeCLIError.argumentIsNotAFile(argument: inputFile.path)
     }
 
-    var transcript = try AmazonTranscribe.Transcript(file: inputFile)
-    transcript[speaker: "spk_0"]?.name = "John Sundell"
-    transcript[speaker: "spk_1"]?.name = "Garric Nahapetian"
-    transcript[speaker: "spk_2"]?.name = "Chris Lattner"
+    let transcript = try AmazonTranscribe.Transcript(file: inputFile)
     let markdown = transcript.makeMarkdown()
-
     let outputDirectory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     let outputFilename = inputFile.deletingPathExtension().appendingPathExtension("md").lastPathComponent
     let outputFile = outputDirectory.appendingPathComponent(outputFilename)
