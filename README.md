@@ -33,6 +33,24 @@ If you want to create a new transcription, you must first create and run a trans
 
 ### In Code
 
+To use the library in a SwiftPM package, add this to your `Package.swift`:
+
+```swift
+let package = Package(
+    ...
+    dependencies: [
+        .package(url: "https://github.com/ole/transcribe", .branch("master")),
+    ],
+    targets: [
+        .target(name: "YOUR_TARGET", dependencies: ["Transcribe"]),
+    ]
+)
+```
+
+Import the module with `import Transcribe`.
+
+Sample code:
+
 ```swift
 import Transcribe
 
