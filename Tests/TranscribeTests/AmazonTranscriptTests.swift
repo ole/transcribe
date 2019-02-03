@@ -8,7 +8,16 @@ final class AmazonTranscriptTests: XCTestCase {
             let sut = try AmazonTranscribe.Transcript(transcriptFile: file)
             XCTAssertEqual(sut.segments.count, 324)
             XCTAssertEqual(sut.speakers.count, 4)
-            XCTAssertEqual(sut.segments[0].fragments.count(where: { if case .pronunciation = $0.kind { return true } else { return false }}), 59)
+            let firstSegmentFragments = sut.segments[0].fragments
+            let pronunciationFragments = firstSegmentFragments.filter { fragment in
+                if case .pronunciation = fragment.kind { return true } else { return false }
+            }
+            let punctuationFragments = firstSegmentFragments.filter { fragment in
+                if case .punctuation = fragment.kind { return true } else { return false }
+            }
+            XCTAssertEqual(firstSegmentFragments.count, 69)
+            XCTAssertEqual(pronunciationFragments.count, 59)
+            XCTAssertEqual(punctuationFragments.count, 10)
         } catch {
             XCTFail(String(reflecting: error))
         }
