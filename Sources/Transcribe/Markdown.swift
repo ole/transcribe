@@ -1,4 +1,5 @@
 extension AmazonTranscribe.Transcript {
+    /// Formats a Transcript data structure as a Markdown string.
     public func makeMarkdown() -> String {
         let paragraphs: [String] = segments.map { segment in
             var text = segment.fragments.first?.content ?? ""
