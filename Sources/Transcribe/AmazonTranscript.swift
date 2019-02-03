@@ -2,7 +2,8 @@ import Foundation
 
 extension AmazonTranscribe {
     /// Model type for working with transcripts
-    /// Use Transcript.init(transcriptFile:) to create this value from a TranscriptFile
+    /// Use `init(transcriptFile:)` to create this value from a file or `init(rawTranscript:)`
+    /// if you already have a `RawTranscript`.
     public struct Transcript {
         public var segments: [Segment]
         public var speakers: [Speaker]
@@ -43,7 +44,7 @@ extension AmazonTranscribe {
         }
 
         public struct Speaker {
-            /// The speaker label in the original `TranscriptFile`
+            /// The speaker label in the original `RawTranscript`
             public var speakerLabel: String
             /// The speaker's name as it should appear in the formatted output.
             public var name: String
