@@ -7,4 +7,6 @@ struct StandardError: TextOutputStream {
     }
 }
 
+/// A TextOutputStream for stderr.
+/// Use `print("...", to: stdError)` to print something to stderr.
 var stdError = StandardError()

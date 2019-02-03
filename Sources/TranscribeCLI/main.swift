@@ -1,3 +1,15 @@
+/// Command-line utility that takes an input file in the Amazon Transcribe API JSON format
+/// and converts it to Markdown.
+///
+/// Usage:
+///
+///     TranscribeCLI FILE
+///
+///     FILE: The input file. Must be in Amazon Transcribe JSON format.
+///
+///     The resulting Markdown file is saved to the current directory with the same basename
+///     as the input file.
+
 import Foundation
 import Transcribe
 
@@ -11,9 +23,9 @@ struct TranscribeCLIError: Error {
     }
 }
 
-do {
-    let outputDirectory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+// MARK: - Main program
 
+do {
     guard CommandLine.arguments.count == 2 else {
         throw TranscribeCLIError.missingArgument
     }
@@ -30,6 +42,7 @@ do {
     transcript[speaker: "spk_2"]?.name = "Chris Lattner"
     let markdown = transcript.makeMarkdown()
 
+    let outputDirectory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     let outputFilename = inputFile.deletingPathExtension().appendingPathExtension("md").lastPathComponent
     let outputFile = outputDirectory.appendingPathComponent(outputFilename)
     try Data(markdown.utf8).write(to: outputFile)
