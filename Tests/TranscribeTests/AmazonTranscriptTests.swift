@@ -2,10 +2,10 @@ import XCTest
 import Transcribe
 
 final class AmazonTranscriptTests: XCTestCase {
-    func test_makeTranscriptFromTranscriptFile() {
+    func test_makeTranscriptFromFile() {
         do {
             let inputFile = try fixturesDirectory().appendingPathComponent("amazon-transcribe-swift-community-podcast-0001.json")
-            let sut = try AmazonTranscribe.Transcript(transcriptFile: inputFile)
+            let sut = try AmazonTranscribe.Transcript(file: inputFile)
             XCTAssertEqual(sut.segments.count, 324)
             XCTAssertEqual(sut.speakers.count, 4)
             let firstSegmentFragments = sut.segments[0].fragments
@@ -24,6 +24,6 @@ final class AmazonTranscriptTests: XCTestCase {
     }
 
     static var allTests = [
-        ("test_makeTranscriptFromTranscriptFile", test_makeTranscriptFromTranscriptFile),
+        ("test_makeTranscriptFromFile", test_makeTranscriptFromFile),
     ]
 }

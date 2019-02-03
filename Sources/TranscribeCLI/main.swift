@@ -36,7 +36,7 @@ do {
         throw TranscribeCLIError.argumentIsNotAFile(argument: inputFile.path)
     }
 
-    var transcript = try AmazonTranscribe.Transcript(transcriptFile: inputFile)
+    var transcript = try AmazonTranscribe.Transcript(file: inputFile)
     transcript[speaker: "spk_0"]?.name = "John Sundell"
     transcript[speaker: "spk_1"]?.name = "Garric Nahapetian"
     transcript[speaker: "spk_2"]?.name = "Chris Lattner"

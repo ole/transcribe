@@ -8,7 +8,7 @@ extension AmazonRawTranscriptTests {
 
 extension AmazonTranscriptTests {
     static let __allTests = [
-        ("test_makeTranscriptFromTranscriptFile", test_makeTranscriptFromTranscriptFile),
+        ("test_makeTranscriptFromFile", test_makeTranscriptFromFile),
     ]
 }
 

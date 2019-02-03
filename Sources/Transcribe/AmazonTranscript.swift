@@ -2,7 +2,7 @@ import Foundation
 
 extension AmazonTranscribe {
     /// Model type for working with transcripts
-    /// Use `init(transcriptFile:)` to create this value from a file or `init(rawTranscript:)`
+    /// Use `init(file:)` to create this value from a file or `init(rawTranscript:)`
     /// if you already have a `RawTranscript`.
     public struct Transcript {
         public var segments: [Segment]
@@ -69,7 +69,7 @@ extension AmazonTranscribe.Transcript {
         self.speakers = []
     }
 
-    public init(transcriptFile file: URL) throws {
+    public init(file: URL) throws {
         let rawTranscript = try AmazonTranscribe.RawTranscript(file: file)
         try self.init(rawTranscript: rawTranscript)
     }
