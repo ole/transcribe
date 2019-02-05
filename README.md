@@ -80,11 +80,16 @@ transcript[speaker: "spk_1"]?.name = "Bob"
 let markdown = transcript.makeMarkdown()
 let outputFile = URL(fileURLWithPath: "output.md") // Change path to your output file
 try Data(markdown.utf8).write(to: outputFile)
+
+// Save as WebVTT
+let webvtt = transcript.makeWebVTT()
+let outputFile = URL(fileURLWithPath: "output.vtt") // Change path to your output file
+try Data(webvtt.utf8).write(to: outputFile)
 ```
 
 ### On the Command Line
 
-The command line tool takes an input file and converts it to Markdown.
+The command line tool takes an input file and converts it to Markdown and WebVTT.
 
 Usage:
 
