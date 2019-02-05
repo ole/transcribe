@@ -8,7 +8,7 @@ let package = Package(
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .executable(name: "TranscribeCLI", targets: ["TranscribeCLI"]),
-        .library(name: "Transcribe", targets: ["Transcribe"]),
+        .library(name: "Transcribe", targets: ["Transcribe"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -19,6 +19,6 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(name: "TranscribeCLI", dependencies: ["Transcribe"]),
         .target(name: "Transcribe", dependencies: []),
-        .testTarget(name: "TranscribeTests", dependencies: ["Transcribe"]),
+        .testTarget(name: "TranscribeTests", dependencies: ["Transcribe"])
     ]
 )

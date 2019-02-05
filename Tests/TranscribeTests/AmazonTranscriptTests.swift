@@ -1,5 +1,5 @@
-import XCTest
 import Transcribe
+import XCTest
 
 final class AmazonTranscriptTests: XCTestCase {
     func test_makeTranscriptFromFile() {
@@ -22,7 +22,7 @@ final class AmazonTranscriptTests: XCTestCase {
             XCTFail(String(reflecting: error))
         }
     }
-    
+
     func test_makeTranscriptFromFileShort() {
         do {
             let inputFile = try fixturesDirectory().appendingPathComponent("amazon-transcribe-swift-community-podcast-0001-formatted-short.json")
@@ -46,5 +46,6 @@ final class AmazonTranscriptTests: XCTestCase {
 
     static var allTests = [
         ("test_makeTranscriptFromFile", test_makeTranscriptFromFile),
+        ("test_makeTranscriptFromFileShort", test_makeTranscriptFromFileShort)
     ]
 }
