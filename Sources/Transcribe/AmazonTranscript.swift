@@ -22,9 +22,23 @@ extension AmazonTranscribe {
 
         /// A list of consecutive fragments by the same speaker
         public struct Segment {
-            public var time: Range<Timecode>
-            public var speakerLabel: String
-            public var fragments: [Fragment]
+            public let time: Range<Timecode>
+            public let speakerLabel: String
+            public let fragments: [Fragment]
+            public var content: String {
+                // TODO: this might be cached
+                var text = fragments.first?.content ?? ""
+                for fragment in fragments.dropFirst() {
+                    switch fragment.kind {
+                    case .pronunciation(let p):
+                        text.append(" ")
+                        text.append(p.content)
+                    case .punctuation(let content):
+                        text.append(content)
+                    }
+                }
+                return text
+            }
         }
 
         /// A fragment of transcribed speech. Could be a word or punctuation.

@@ -1,5 +1,5 @@
-import XCTest
 @testable import Transcribe
+import XCTest
 
 final class AmazonRawTranscriptTests: XCTestCase {
     func test_parseAmazonTranscribeJSONFile() {
@@ -17,6 +17,6 @@ final class AmazonRawTranscriptTests: XCTestCase {
     }
 
     static var allTests = [
-        ("test_parseAmazonTranscribeJSONFile", test_parseAmazonTranscribeJSONFile),
+        ("test_parseAmazonTranscribeJSONFile", test_parseAmazonTranscribeJSONFile)
     ]
 }
