@@ -94,7 +94,7 @@ The command line tool takes an input file and converts it to Markdown and WebVTT
 Usage:
 
 ```sh
-swift run -c release TranscribeCLI transcript.json
+swift run -c release TranscribeCLI --json transcript.json
 ```
 
 This will produce an `transcript.md` file in the current directory.
