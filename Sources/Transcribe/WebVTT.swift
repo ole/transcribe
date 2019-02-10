@@ -5,6 +5,7 @@ extension AmazonTranscribe.Transcript {
     public func makeWebVTT() -> String {
 
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "HH:mm:ss.SSS"
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
 
