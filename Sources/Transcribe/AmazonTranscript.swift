@@ -46,14 +46,34 @@ extension AmazonTranscribe {
             public var kind: Kind
             public var speakerLabel: String
 
+            public init(kind: Kind, speakerLabel: String) {
+                self.kind = kind
+                self.speakerLabel = speakerLabel
+            }
+
+            /// The raw text contents of this fragment.
+            public var content: String {
+                switch kind {
+                case .pronunciation(let p):
+                    return p.content
+                case .punctuation(let content):
+                    return content
+                }
+            }
+
             public enum Kind {
                 case pronunciation(Pronunciation)
                 case punctuation(String)
             }
 
             public struct Pronunciation {
-                var time: Range<Timecode>
-                var content: String
+                public var time: Range<Timecode>
+                public var content: String
+
+                public init(time: Range<Timecode>, content: String) {
+                    self.time = time
+                    self.content = content
+                }
             }
         }
 
@@ -62,17 +82,6 @@ extension AmazonTranscribe {
             public var speakerLabel: String
             /// The speaker's name as it should appear in the formatted output.
             public var name: String
-        }
-    }
-}
-
-extension AmazonTranscribe.Transcript.Fragment {
-    public var content: String {
-        switch kind {
-        case .pronunciation(let p):
-            return p.content
-        case .punctuation(let content):
-            return content
         }
     }
 }

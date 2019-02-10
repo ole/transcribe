@@ -4,7 +4,11 @@ public struct Timecode {
     /// Number of seconds since the start of the recording.
     public var seconds: TimeInterval
 
-    init?(text: String) {
+    public init(seconds: TimeInterval) {
+        self.seconds = seconds
+    }
+    
+    public init?(text: String) {
         guard let seconds = TimeInterval(text) else {
             return nil
         }

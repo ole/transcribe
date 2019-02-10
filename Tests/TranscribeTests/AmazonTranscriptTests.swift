@@ -44,6 +44,20 @@ final class AmazonTranscriptTests: XCTestCase {
         }
     }
 
+    func test_fragmentContent_pronunciation() {
+        let sut = AmazonTranscribe.Transcript.Fragment(
+            kind: .pronunciation(.init(
+                time: Timecode(seconds: 0)..<Timecode(seconds: 1),
+                content: "Hello")),
+            speakerLabel: "Alice")
+        XCTAssertEqual(sut.content, "Hello")
+    }
+
+    func test_fragmentContent_punctuation() {
+        let sut = AmazonTranscribe.Transcript.Fragment(kind: .punctuation(","), speakerLabel: "Alice")
+        XCTAssertEqual(sut.content, ",")
+    }
+
     static var allTests = [
         ("test_makeTranscriptFromFile", test_makeTranscriptFromFile),
         ("test_makeTranscriptFromFileShort", test_makeTranscriptFromFileShort)
