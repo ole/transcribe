@@ -33,8 +33,9 @@ extension AmazonTranscribe {
             }
 
             public var content: String {
-                // TODO: this might be cached
                 var text = fragments.first?.content ?? ""
+            /// The concatenated string contents of all fragments that make up this segment.
+            /// - TODO: Consider caching this for subsequent invocations.
                 for fragment in fragments.dropFirst() {
                     switch fragment.kind {
                     case .pronunciation(let p):
