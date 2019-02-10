@@ -25,6 +25,13 @@ extension AmazonTranscribe {
             public let time: Range<Timecode>
             public let speakerLabel: String
             public let fragments: [Fragment]
+
+            public init(time: Range<Timecode>, speakerLabel: String, fragments: [Fragment]) {
+                self.time = time
+                self.speakerLabel = speakerLabel
+                self.fragments = fragments
+            }
+
             public var content: String {
                 // TODO: this might be cached
                 var text = fragments.first?.content ?? ""
