@@ -22,7 +22,7 @@ extension AmazonTranscribe.Transcript {
 
             return """
             \(speechBegan) --> \(speechEnded)
-            <v \(speakerName)>\(segment.content)
+            <v \(speakerName)>\(segment.text)
             """
         }
 

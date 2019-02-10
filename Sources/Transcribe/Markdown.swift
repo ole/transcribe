@@ -8,7 +8,7 @@ extension AmazonTranscribe.Transcript {
             }
             return """
             \(segment.time.lowerBound.seconds)–\(segment.time.upperBound.seconds)<br>
-            **\(speakerName)** \(segment.content)
+            **\(speakerName)** \(segment.text)
             """
         }
         return paragraphs.joined(separator: "\n\n")

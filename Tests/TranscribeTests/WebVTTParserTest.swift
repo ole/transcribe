@@ -30,7 +30,7 @@ final class WebVTTParserTest: XCTestCase {
             let webvtt = sut.makeWebVTT()
 
             // assert
-            XCTAssertEqual(sut.segments[0].content, "Welcome to the very first episode of the Swift Community Podcast. A show for the Swift community by the Swift Community. I am one of your hosts, John Sindel. And with me, I have two wonderful co hosts, the first of which you might know as the host of the Swift coders podcast. Mr. Garric Nahapetian. How's going Garric?")
+            XCTAssertEqual(sut.segments[0].text, "Welcome to the very first episode of the Swift Community Podcast. A show for the Swift community by the Swift Community. I am one of your hosts, John Sindel. And with me, I have two wonderful co hosts, the first of which you might know as the host of the Swift coders podcast. Mr. Garric Nahapetian. How's going Garric?")
             XCTAssertEqual(webvtt, referenceSegmentContent)
 
         } catch {
