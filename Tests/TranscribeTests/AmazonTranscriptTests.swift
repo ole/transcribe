@@ -44,6 +44,62 @@ final class AmazonTranscriptTests: XCTestCase {
         }
     }
 
+    func test_fragmentText_pronunciation() {
+        let sut = AmazonTranscribe.Transcript.Fragment(
+            kind: .pronunciation(.init(
+                time: Timecode(seconds: 0)..<Timecode(seconds: 1),
+                content: "Hello")),
+            speakerLabel: "Alice")
+        XCTAssertEqual(sut.text, "Hello")
+    }
+
+    func test_fragmentText_punctuation() {
+        let sut = AmazonTranscribe.Transcript.Fragment(kind: .punctuation(","), speakerLabel: "Alice")
+        XCTAssertEqual(sut.text, ",")
+    }
+
+    func test_segmentText() {
+        let fragment1 = AmazonTranscribe.Transcript.Fragment(
+            kind: .pronunciation(.init(
+                time: Timecode(seconds: 0)..<Timecode(seconds: 1),
+                content: "Hello")),
+            speakerLabel: "Alice")
+        let fragment2 = AmazonTranscribe.Transcript.Fragment(
+            kind: .pronunciation(.init(
+                time: Timecode(seconds: 1)..<Timecode(seconds: 2),
+                content: "world")),
+            speakerLabel: "Alice")
+        let fragment3 = AmazonTranscribe.Transcript.Fragment(
+            kind: .punctuation("!"),
+            speakerLabel: "Alice")
+        let sut = AmazonTranscribe.Transcript.Segment(
+            time: Timecode(seconds: 0)..<Timecode(seconds: 2),
+            speakerLabel: "Alice",
+            fragments: [fragment1, fragment2, fragment3])
+        XCTAssertEqual(sut.text, "Hello world!")
+    }
+
+    func test_segmentText_trailingPronunciationShouldNotHaveTrailingSpace() {
+        let fragment1 = AmazonTranscribe.Transcript.Fragment(
+            kind: .pronunciation(.init(
+                time: Timecode(seconds: 0)..<Timecode(seconds: 1),
+                content: "Hello")),
+            speakerLabel: "Alice")
+        let fragment2 = AmazonTranscribe.Transcript.Fragment(
+            kind: .punctuation(","),
+            speakerLabel: "Alice")
+        let fragment3 = AmazonTranscribe.Transcript.Fragment(
+            kind: .pronunciation(.init(
+                time: Timecode(seconds: 1)..<Timecode(seconds: 2),
+                content: "world")),
+            speakerLabel: "Alice")
+        let sut = AmazonTranscribe.Transcript.Segment(
+            time: Timecode(seconds: 0)..<Timecode(seconds: 2),
+            speakerLabel: "Alice",
+            fragments: [fragment1, fragment2, fragment3])
+        XCTAssertEqual(sut.text, "Hello, world")
+    }
+
     static var allTests = [
         ("test_makeTranscriptFromFile", test_makeTranscriptFromFile),
         ("test_makeTranscriptFromFileShort", test_makeTranscriptFromFileShort)
