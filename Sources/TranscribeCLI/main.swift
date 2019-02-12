@@ -65,8 +65,6 @@ do {
     let webvttOutputFile = outputDirectory.appendingPathComponent(webvttOutputFilename)
     try Data(webvtt.utf8).write(to: webvttOutputFile)
 
-} catch let error as ArgumentParserError {
-    print(error.description)
 } catch {
     print("Error: \(error)", to: &stdError)
     exit(-1)
