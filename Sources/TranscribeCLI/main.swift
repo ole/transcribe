@@ -44,13 +44,15 @@ do {
     let outputDirectory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 
     // Set speaker names
-    if let speakerNames = parsedArguments.get(rawSpeakerNames),
-        speakerNames.count == transcript.speakers.count {
-        for (index, speaker) in transcript.speakers.enumerated() {
-            transcript[speaker: speaker.speakerLabel]?.name = speakerNames[index]
+    if let speakerNames = parsedArguments.get(rawSpeakerNames) {
+        // Counts of names passed on CLI and speakers in Transcript do not match => print warning
+        if speakerNames.count != transcript.speakers.count {
+            print("Warning: Number of speaker names passed in (\(speakerNames.count)) does not match the number of speakers in the transcript (\(transcript.speakers.count) – \(transcript.speakers.map { $0.speakerLabel }))", to: &stdError)
         }
-    } else {
-        throw ArgumentParserError.invalidValue(argument: "--names", error: ArgumentConversionError.custom("Wrong number of speaker names (should be \(transcript.speakers.count))"))
+        
+        for (speakerName, speakerIndex) in zip(speakerNames, transcript.speakers.indices) {
+            transcript.speakers[speakerIndex].name = speakerName
+        }
     }
     
     // write markdown file
