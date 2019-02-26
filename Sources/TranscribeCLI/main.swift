@@ -9,8 +9,7 @@
 ///     FILE: The input file. Must be in Amazon Transcribe JSON format.
 ///     SPEAKER: Name of the speaker. Should be ordered by appearance.
 ///
-///     The resulting Markdown and WebVTT file is saved to the current directory with the
-///     same basename as the input file.
+///     The resulting Markdown or WebVTT output will be written into the standard output.
 
 import Foundation
 import Transcribe
@@ -24,6 +23,9 @@ do {
                                 overview: "A Swift parser for output files from automated transcription services.")
     let rawInputFilename = parser.add(option: "--json", shortName: "-j", kind: PathArgument.self, usage: "Amazon transcribe json file, e.g. './TestFixtures/amazon-transcribe-swift-community-podcast-0001-formatted-short.json'")
     let rawSpeakerNames = parser.add(option: "--names", shortName: "-n", kind: [String].self, usage: "Array of speaker names, e.g. 'alice bob'")
+    let possibleOutputFormats = OutputFormat.allCases.map({ $0.rawValue }).joined(separator: ", ")
+    let outputFormatArgument = parser.add(option: "--format", shortName: "-f", kind: OutputFormat.self, usage: "Specify the output format. Possible values are \(possibleOutputFormats). If omitted, \(OutputFormat.default) will be used.", completion: OutputFormat.completion)
+    let outputArgument = parser.add(option: "--output", shortName: "-o", kind: PathArgument.self, usage: "Specify the output file path. If omitted, output will be written into the standard output.")
     
     // The first argument is always the executable, drop it
     let arguments = Array(ProcessInfo.processInfo.arguments.dropFirst())
@@ -41,7 +43,6 @@ do {
 
     // parse the amazon transcription json file
     var transcript = try AmazonTranscribe.Transcript(file: inputFile)
-    let outputDirectory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 
     // Set speaker names
     if let speakerNames = parsedArguments.get(rawSpeakerNames) {
@@ -55,17 +56,22 @@ do {
         }
     }
     
-    // write markdown file
-    let markdown = transcript.makeMarkdown()
-    let markdownOutputFilename = inputFile.deletingPathExtension().appendingPathExtension("md").lastPathComponent
-    let markdownOutputFile = outputDirectory.appendingPathComponent(markdownOutputFilename)
-    try Data(markdown.utf8).write(to: markdownOutputFile)
+    let outputFormat = parsedArguments.get(outputFormatArgument) ?? .default
 
-    // write webvtt file
-    let webvtt = transcript.makeWebVTT()
-    let webvttOutputFilename = inputFile.deletingPathExtension().appendingPathExtension("vtt").lastPathComponent
-    let webvttOutputFile = outputDirectory.appendingPathComponent(webvttOutputFilename)
-    try Data(webvtt.utf8).write(to: webvttOutputFile)
+    let output: String
+    switch outputFormat {
+    case .markdown:
+        output = transcript.makeMarkdown()
+    case .webvtt:
+        output = transcript.makeWebVTT()
+    }
+
+    if let outputPath = parsedArguments.get(outputArgument) {
+        let url = URL(fileURLWithPath: outputPath.path.asString)
+        try Data(output.utf8).write(to: url)
+    } else {
+        print(output.utf8)
+    }
 
 } catch {
     print("Error: \(error)", to: &stdError)
