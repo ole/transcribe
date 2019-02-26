@@ -24,6 +24,8 @@ do {
                                 overview: "A Swift parser for output files from automated transcription services.")
     let rawInputFilename = parser.add(option: "--json", shortName: "-j", kind: PathArgument.self, usage: "Amazon transcribe json file, e.g. './TestFixtures/amazon-transcribe-swift-community-podcast-0001-formatted-short.json'")
     let rawSpeakerNames = parser.add(option: "--names", shortName: "-n", kind: [String].self, usage: "Array of speaker names, e.g. 'alice bob'")
+    let possibleOutputFormats = OutputFormat.allCases.map({ $0.rawValue }).joined(separator: ", ")
+    let outputFormatArgument = parser.add(option: "--format", shortName: "-f", kind: OutputFormat.self, usage: "Specify the output format. Possible values are \(possibleOutputFormats). If omitted, \(OutputFormat.default) will be used.", completion: OutputFormat.completion)
     
     // The first argument is always the executable, drop it
     let arguments = Array(ProcessInfo.processInfo.arguments.dropFirst())
@@ -55,17 +57,22 @@ do {
         }
     }
     
-    // write markdown file
-    let markdown = transcript.makeMarkdown()
-    let markdownOutputFilename = inputFile.deletingPathExtension().appendingPathExtension("md").lastPathComponent
-    let markdownOutputFile = outputDirectory.appendingPathComponent(markdownOutputFilename)
-    try Data(markdown.utf8).write(to: markdownOutputFile)
+    let outputFormat = parsedArguments.get(outputFormatArgument) ?? .default
 
-    // write webvtt file
-    let webvtt = transcript.makeWebVTT()
-    let webvttOutputFilename = inputFile.deletingPathExtension().appendingPathExtension("vtt").lastPathComponent
-    let webvttOutputFile = outputDirectory.appendingPathComponent(webvttOutputFilename)
-    try Data(webvtt.utf8).write(to: webvttOutputFile)
+    switch outputFormat {
+    case .markdown:
+        // write markdown file
+        let markdown = transcript.makeMarkdown()
+        let markdownOutputFilename = inputFile.deletingPathExtension().appendingPathExtension("md").lastPathComponent
+        let markdownOutputFile = outputDirectory.appendingPathComponent(markdownOutputFilename)
+        try Data(markdown.utf8).write(to: markdownOutputFile)
+    case .webvtt:
+        // write webvtt file
+        let webvtt = transcript.makeWebVTT()
+        let webvttOutputFilename = inputFile.deletingPathExtension().appendingPathExtension("vtt").lastPathComponent
+        let webvttOutputFile = outputDirectory.appendingPathComponent(webvttOutputFilename)
+        try Data(webvtt.utf8).write(to: webvttOutputFile)
+    }
 
 } catch {
     print("Error: \(error)", to: &stdError)
