@@ -97,7 +97,13 @@ Usage:
 swift run -c release TranscribeCLI --json transcript.json
 ```
 
-This will produce an `transcript.md` file in the current directory.
+This will print a [WebVTT](https://en.wikipedia.org/wiki/WebVTT)-formatted transcript to standard out.
+
+Run the command line tool with `--help` for the documentation of all options:
+
+```sh
+swift run TranscribeCLI --help
+```
 
 ## Overview of the Main Data Structures
 
