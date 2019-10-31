@@ -1,4 +1,4 @@
-import Utility
+import SPMUtility
 
 enum OutputFormat: String, CaseIterable {
     case markdown = "markdown"

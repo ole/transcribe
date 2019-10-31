@@ -13,7 +13,7 @@
 
 import Foundation
 import Transcribe
-import Utility
+import SPMUtility
 
 // MARK: - Main program
 
@@ -31,12 +31,12 @@ do {
     let arguments = Array(ProcessInfo.processInfo.arguments.dropFirst())
     let parsedArguments = try parser.parse(arguments)
     guard let inputFilename = parsedArguments.get(inputFileArgument),
-        inputFilename.path.asString.lowercased().hasSuffix("json") else {
+        inputFilename.path.pathString.lowercased().hasSuffix("json") else {
         throw ArgumentParserError.invalidValue(argument: "--json", error: ArgumentConversionError.custom("No json file specified"))
     }
    
     // Validate input file
-    let inputFile = URL(fileURLWithPath: inputFilename.path.asString).standardizedFileURL
+    let inputFile = inputFilename.path.asURL.standardizedFileURL
     guard let isRegularFile = try? inputFile.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile, isRegularFile == true else {
         throw ArgumentParserError.invalidValue(argument: "--json", error: ArgumentConversionError.custom("File not found"))
     }
@@ -68,7 +68,7 @@ do {
 
     // Print output or write to file
     if let outputPath = parsedArguments.get(outputFileArgument) {
-        let url = URL(fileURLWithPath: outputPath.path.asString)
+        let url = outputPath.path.asURL.standardizedFileURL
         try Data(output.utf8).write(to: url)
     } else {
         print(output.utf8)
